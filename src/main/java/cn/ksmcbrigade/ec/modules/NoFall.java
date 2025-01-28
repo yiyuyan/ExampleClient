@@ -15,7 +15,7 @@ public class NoFall extends Module {
 
     @Override
     public void onTick(Minecraft MC, LocalPlayer player) {
-        if(player.fallDistance>=3 && !player.isCreative() && !player.isSpectator() && !player.getItemInHand(player.getUsedItemHand()).is(Items.MACE)){
+        if(player.fallDistance>=3 && !player.mayFly() && !player.isFallFlying() && player.getDeltaMovement().y>=-0.5 && !player.isCreative() && !player.isSpectator() && !player.getItemInHand(player.getUsedItemHand()).is(Items.MACE)){
             MC.getConnection().getConnection().send(new ServerboundMovePlayerPacket.StatusOnly(true));
         }
     }

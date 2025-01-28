@@ -1,10 +1,14 @@
 package cn.ksmcbrigade.ec;
 
+import cn.ksmcbrigade.ca.config.Config;
 import cn.ksmcbrigade.ec.config.ModuleConfig;
 import cn.ksmcbrigade.ec.module.Module;
+import cn.ksmcbrigade.ec.modules.CreativeFlight;
 import cn.ksmcbrigade.ec.modules.FullBright;
 import cn.ksmcbrigade.ec.modules.NoFall;
 import cn.ksmcbrigade.ec.modules.XRay;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -18,6 +22,9 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -30,12 +37,13 @@ public class ExampleClient {
 
     public static final ArrayList<Module> MODULES = new ArrayList<>();
 
-    public ExampleClient(IEventBus modEventBus, ModContainer modContainer) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public ExampleClient(IEventBus modEventBus, ModContainer modContainer) throws IOException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
         NeoForge.EVENT_BUS.register(this);
 
         MODULES.add(new FullBright());
         MODULES.add(new XRay());
         MODULES.add(new NoFall());
+        MODULES.add(new CreativeFlight());
 
         ModuleConfig.init();
 
@@ -54,6 +62,18 @@ public class ExampleClient {
                 }
             }
         }
+
+        //test
+        Config config = ModuleConfig.enables_config;
+        Method method = null;
+        try {
+            method = config.getClass().getDeclaredMethod("get");
+            method.setAccessible(true);
+            System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(method.invoke(config).toString()));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @SubscribeEvent

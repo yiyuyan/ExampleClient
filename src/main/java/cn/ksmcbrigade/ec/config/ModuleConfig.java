@@ -11,7 +11,7 @@ public class ModuleConfig {
     public static Config enables_config = null;
     public static Config keys_config = null;
 
-    public static void init() throws IOException, NoSuchFieldException, IllegalAccessException {
+    public static void init() throws IOException {
         if(enables_config==null || keys_config==null){
             ConfigBuilder builder = new ConfigBuilder("ec-modules-enables.json",true);
             for (Module module : ExampleClient.MODULES) {
@@ -20,11 +20,11 @@ public class ModuleConfig {
             builder.setCallback((s,o)->{
                 for (Module module : ExampleClient.MODULES) {
                     if(module.name.equalsIgnoreCase(s)){
-                        if(o instanceof Boolean e) module.enable = e;
+                        if(o instanceof Boolean e && e!=module.enable) module.set(e);
                     }
                 }
             });
-            enables_config = builder.build();
+            enables_config = builder.buildOnly();
             ConfigBuilder keys_builder = new ConfigBuilder("ec-modules-keys.json",true);
             for (Module module : ExampleClient.MODULES) {
                 keys_builder.data.put(module.name,module.key);
@@ -32,11 +32,14 @@ public class ModuleConfig {
             keys_builder.setCallback((s,o)->{
                 for (Module module : ExampleClient.MODULES) {
                     if(module.name.equalsIgnoreCase(s)){
-                        if(o instanceof Integer k) module.key = k;
+                        if(o instanceof Integer k && k!=module.key) module.key = k;
                     }
                 }
             });
-            keys_config = keys_builder.build();
+            keys_config = keys_builder.buildOnly();
+
+            enables_config.reload();
+            keys_config.reload();
         }
     }
 }
