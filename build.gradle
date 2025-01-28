@@ -117,7 +117,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    implementation files("lib/ca-neoforge-1.21-1.0.jar")
+    implementation files("lib/ca-neoforge-1.21-1.1.jar")
     implementation files("lib/el-1.0.jar")
 }
 

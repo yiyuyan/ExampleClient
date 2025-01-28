@@ -75,7 +75,7 @@ side = "BOTH"
 modId = "ca"
 type = "required"
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-versionRange = "*"
+versionRange = "[1.1,)"
 ordering = "NONE"
 side = "CLIENT"
 [[dependencies."${mod_id}"]]

@@ -17,11 +17,25 @@ public class ModuleConfig {
             for (Module module : ExampleClient.MODULES) {
                 builder.data.put(module.name,module.enable);
             }
+            builder.setCallback((s,o)->{
+                for (Module module : ExampleClient.MODULES) {
+                    if(module.name.equalsIgnoreCase(s)){
+                        if(o instanceof Boolean e) module.enable = e;
+                    }
+                }
+            });
             enables_config = builder.build();
             ConfigBuilder keys_builder = new ConfigBuilder("ec-modules-keys.json",true);
             for (Module module : ExampleClient.MODULES) {
                 keys_builder.data.put(module.name,module.key);
             }
+            keys_builder.setCallback((s,o)->{
+                for (Module module : ExampleClient.MODULES) {
+                    if(module.name.equalsIgnoreCase(s)){
+                        if(o instanceof Integer k) module.key = k;
+                    }
+                }
+            });
             keys_config = keys_builder.build();
         }
     }
